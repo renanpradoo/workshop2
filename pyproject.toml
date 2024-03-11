@@ -6,7 +6,7 @@ authors = ["Renan Prado <renanpradoo@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11.5"
 mkdocs = "^1.5.3"
 mkdocs-mermaid2-plugin = "^1.1.1"
 mkdocs-material = "^9.5.13"
