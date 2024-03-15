@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 from sqlalchemy import create_engine
 import pandera as pa
-from schema import MyDataFrameSchema
 
 def load_settings():
     dotenv_path = Path.cwd() / '.env'
@@ -19,9 +18,6 @@ def load_settings():
     }
     return settings
 
-# pa.check_output(MyDataFrameSchema)
-
-@pa.check_output(MyDataFrameSchema, lazy=True)
 def extrair_do_sql(query: str) -> pd.DataFrame:
 
     settings = load_settings()
@@ -35,10 +31,14 @@ def extrair_do_sql(query: str) -> pd.DataFrame:
     return df
 
 if __name__ == "__main__":
-    query = "select * from produtos_bronze_email"
+    query = "select * from produtos_bronze"
     df = extrair_do_sql(query=query)
-    print(df)
+    schema_df = pa.infer_schema(df)
 
+    with open('schema_df.py', 'w', encoding='utf-8') as arquivo:
+        arquivo.write(schema_df.to_script())
+        
+    print(df)
 
 # Cria a URL de conexao com o banco de dados
 # DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
